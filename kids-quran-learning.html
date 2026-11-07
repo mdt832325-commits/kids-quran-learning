@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kids Quran Learning — Islamic Learning App for Children</title>
+<meta name="description" content="Learn Quran, Arabic, Surahs & Duas — fun for kids. Kids Quran, Islamic learning, learn Arabic, Surah, Dua, Islamic stories, Muslim kids.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f3f7f2;color:#1f2a22;max-width:640px;margin:0 auto;min-height:100vh}
+header{background:linear-gradient(135deg,#064e3b,#0b7a4b);color:#fff;text-align:center;padding:22px 16px 18px;border-radius:0 0 26px 26px}
+header img{width:96px;height:96px;border-radius:24px;border:3px solid #d4af37;background:#fff;object-fit:cover}
+header h1{font-size:23px;margin-top:10px;line-height:1.25}
+header p.tag{color:#f6d873;font-weight:600;margin-top:6px;font-size:15px}
+header p.keys{font-size:11.5px;color:#cde8d4;margin-top:8px;line-height:1.5}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:14px 12px}
+nav button{border:2px solid #0b7a4b;background:#fff;color:#064e3b;font-weight:700;font-size:14px;padding:9px 13px;border-radius:999px;cursor:pointer}
+nav button.active{background:#0b7a4b;color:#fff}
+main{padding:6px 14px 40px}
+section{display:none}
+section.active{display:block}
+.card{background:#fff;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #e2efe4}
+.card h2{color:#064e3b;font-size:20px;margin-bottom:8px}
+.card h3{color:#0b7a4b;font-size:17px;margin:12px 0 6px}
+.card p{line-height:1.65;font-size:15px}
+.bn{color:#4b5563;font-size:14px}
+.arabic{direction:rtl;text-align:right;font-size:26px;line-height:2.1;font-family:'Traditional Arabic','Scheherazade New','Amiri',serif;color:#064e3b}
+.arabic-big{direction:rtl;text-align:center;font-size:52px;font-family:'Traditional Arabic','Scheherazade New','Amiri',serif;color:#064e3b;line-height:1.4}
+.verse{padding:10px 8px;border-radius:12px;cursor:pointer;border:1px solid transparent}
+.verse:hover{background:#f0f7f1}
+.verse.sel{background:#fff7d6;border-color:#d4af37}
+.translit{font-style:italic;color:#374151;font-size:14.5px;line-height:1.6}
+.bigbtn{display:block;width:100%;text-align:left;background:linear-gradient(135deg,#0b7a4b,#064e3b);color:#fff;border:none;border-radius:18px;padding:18px;margin:10px 0;font-size:18px;font-weight:700;cursor:pointer}
+.bigbtn span{display:block;font-size:13.5px;font-weight:400;color:#cde8d4;margin-top:4px}
+.bigbtn span:first-child{font-size:18px;font-weight:700;color:#fff;margin-top:0}
+.smallbtn{background:#d4af37;color:#3d2f00;border:none;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer;margin:6px 4px 0 0}
+.smallbtn.green{background:#0b7a4b;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.letter{background:#fff;border:2px solid #d4af37;border-radius:16px;padding:14px 4px;text-align:center;cursor:pointer}
+.letter b{display:block;font-size:34px;color:#064e3b;font-family:'Traditional Arabic','Scheherazade New','Amiri',serif;line-height:1.2}
+.letter small{font-size:12px;color:#4b5563}
+.letter.sel{background:#fff7d6;border-color:#0b7a4b}
+.quizopt{display:block;width:100%;text-align:left;background:#fff;border:2px solid #0b7a4b;border-radius:12px;padding:12px;margin:8px 0;font-size:16px;cursor:pointer}
+.quizopt.correct{background:#d1fae5}
+.quizopt.wrong{background:#fee2e2}
+.wordemoji{font-size:84px;text-align:center;line-height:1.2}
+.wordemoji.pop{animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(.3) rotate(-12deg)}60%{transform:scale(1.15) rotate(6deg)}100%{transform:scale(1) rotate(0)}}
+.wordbig{text-align:center;font-size:30px;font-weight:800;color:#064e3b}
+.wordrhyme{text-align:center;font-size:17px;color:#374151;margin-top:6px}
+.letter .wd{display:block;font-size:13px;color:#0b7a4b;font-weight:700}
+.stars{font-size:30px;text-align:center;margin:10px 0}
+.langbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;background:#fff;border:1px solid #e2efe4;border-radius:16px;padding:10px 12px;margin:12px 14px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.langbar label{font-weight:700;color:#064e3b;font-size:14px}
+.langbar select{font-size:15px;font-weight:700;color:#064e3b;border:2px solid #0b7a4b;border-radius:999px;padding:7px 10px;background:#f0f7f1;cursor:pointer;max-width:230px}
+.langnote{width:100%;text-align:center;font-size:12.5px;color:#4b5563;line-height:1.5}
+footer{text-align:center;color:#6b7280;font-size:12.5px;padding:18px}
+</style>
+</head>
+<body>
+<header>
+<img src="icon-512.png" alt="Kids Quran Learning logo" onerror="this.style.display='none'">
+<h1>Kids Quran Learning — Islamic Learning App for Children</h1>
+<p class="tag">Learn Quran, Arabic, Surahs &amp; Duas — fun for kids 🌙</p>
+<p class="keys">Quran • Islamic learning • Kids Quran • Learn Arabic • Surah • Dua • Islamic stories • Muslim kids</p>
+</header>
+<div class="langbar">
+<label for="langSelect" data-i18n="lang_label">Language</label>
+<select id="langSelect" onchange="setLang(this.value)">
+<option value="en">English</option>
+<option value="bn">বাংলা (Bengali)</option>
+<option value="ar">العربية (Arabic)</option>
+<option value="ur">اردو (Urdu)</option>
+<option value="id">Bahasa Indonesia</option>
+<option value="tr">Türkçe (Turkish)</option>
+<option value="fr">Français (French)</option>
+<option value="es">Español (Spanish)</option>
+</select>
+<p class="langnote" data-i18n="note_meanings">Surah meanings are in English and Bengali for now.</p>
+</div>
+<nav id="nav">
+<button data-tab="home" class="active" data-i18n="nav_home">🏠 Home</button>
+<button data-tab="alphabet" data-i18n="nav_alphabet">🔤 Alphabet</button>
+<button data-tab="bengali" data-i18n="nav_bengali">🇧🇩 Bengali</button>
+<button data-tab="english" data-i18n="nav_english">🔠 English</button>
+<button data-tab="surahs" data-i18n="nav_surahs">📖 Surahs</button>
+<button data-tab="duas" data-i18n="nav_duas">🤲 Duas</button>
+<button data-tab="stories" data-i18n="nav_stories">📚 Stories</button>
+<button data-tab="progress" data-i18n="nav_progress">⭐ My Progress</button>
+<button data-tab="about" data-i18n="nav_about">ℹ️ About</button>
+</nav>
+<main>
+
+<section id="home" class="active">
+<div class="card"><h2 data-i18n="welcome_title">Assalamu Alaikum! 👋</h2>
+<p data-i18n="welcome_text">Welcome to <b>Kids Quran Learning</b> — a fun, safe way for children to learn the Quran, Arabic letters, short Surahs, daily Duas and beautiful Islamic stories.</p>
+<p class="bn">আসসালামু আলাইকুম! বাচ্চাদের জন্য কুরআন, আরবি হরফ, ছোট সূরা, দৈনিক দোয়া আর ইসলামিক গল্প শেখার মজার অ্যাপ।</p></div>
+<button class="bigbtn" onclick="showTab('alphabet')"><span data-i18n="home_alphabet">🔤 Arabic Alphabet</span><span data-i18n="home_alphabet_sub">Learn all 28 letters + fun quiz</span></button>
+<button class="bigbtn" onclick="showTab('surahs')"><span data-i18n="home_surahs">📖 Short Surahs</span><span data-i18n="home_surahs_sub">Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Kawthar</span></button>
+<button class="bigbtn" onclick="showTab('duas')"><span data-i18n="home_duas">🤲 Daily Duas</span><span data-i18n="home_duas_sub">Eating, sleeping, home &amp; parents</span></button>
+<button class="bigbtn" onclick="showTab('bengali')"><span data-i18n="home_bengali">🇧🇩 Bengali Alphabet</span><span data-i18n="home_bengali_sub">Vowels + consonants — 50 letters + quiz</span></button>
+<button class="bigbtn" onclick="showTab('english')"><span data-i18n="home_english">🔠 English Alphabet</span><span data-i18n="home_english_sub">A to Z + fun picture words + quiz</span></button>
+<button class="bigbtn" onclick="showTab('stories')"><span data-i18n="home_stories">📚 Islamic Stories</span><span data-i18n="home_stories_sub">Prophet Yunus, Prophet Ibrahim &amp; Al-Amin</span></button>
+<div class="card"><h3 data-i18n="keep_title">⭐ Keep learning, keep shining</h3><p data-i18n="keep_text">Play the alphabet quiz and earn stars. Your stars are saved on this phone only.</p></div>
+</section>
+
+<section id="alphabet">
+<div class="card"><h2 data-i18n="alphabet_title">🔤 Arabic Alphabet — 28 Letters</h2>
+<p data-i18n="alphabet_tap">Tap a letter to see its name. Tap 🔊 to hear its English name read aloud.</p>
+<p class="bn">একটি হরফে ট্যাপ করো — আরবি উচ্চারণ শুনবে, তারপর ইংরেজি নাম। 🔊 চাপলে আবার শুনতে পারবে।</p>
+<div class="grid" id="letterGrid"></div></div>
+<div class="card" id="letterDetail" style="display:none"></div>
+<div class="card"><h2 data-i18n="quiz_title">🎮 Letter Quiz</h2>
+<p data-i18n="quiz_q">What is the name of this letter?</p>
+<div class="arabic-big" id="quizLetter">ا</div>
+<div id="quizOpts"></div>
+<p id="quizMsg"></p>
+<p><span data-i18n="stars_label">⭐ Stars:</span> <b id="quizStars">0</b></p>
+<button class="smallbtn green" onclick="nextQuiz()">Next question ➜</button></div>
+</section>
+
+<section id="bengali">
+<div class="card"><h2 data-i18n="bn_title">🇧🇩 Bengali Alphabet — 50 Letters</h2>
+<p data-i18n="bn_tap">Tap a letter to see its picture-word and hear the rhyme.</p>
+<h3 data-i18n="bn_vowel">স্বরবর্ণ — Vowels (11)</h3>
+<div class="grid" id="bnVowelGrid"></div>
+<h3 data-i18n="bn_consonant">ব্যঞ্জনবর্ণ — Consonants (39)</h3>
+<div class="grid" id="bnConsGrid"></div></div>
+<div class="card" id="bnWordBox" style="display:none"></div>
+<p id="bnVoiceNote" data-i18n="no_bn_voice" style="display:none;text-align:center;color:#92400e;font-size:13.5px"></p>
+<div class="card"><h2 data-i18n="bn_quiz_title">🎮 Bengali Quiz</h2>
+<p data-i18n="bn_quiz_q">Which word starts with this letter?</p>
+<div style="text-align:center;font-size:52px;color:#064e3b" id="bnQuizLetter">অ</div>
+<div id="bnQuizOpts"></div>
+<p id="bnQuizMsg"></p>
+<p><span data-i18n="stars_label">⭐ Stars:</span> <b id="bnQuizStars">0</b></p>
+<button class="smallbtn green" onclick="nextBnQuiz()">Next question ➜</button></div>
+</section>
+
+<section id="english">
+<div class="card"><h2 data-i18n="en_title">🔠 English Alphabet — A to Z</h2>
+<p data-i18n="en_tap">Tap a letter to see its picture-word and hear the rhyme.</p>
+<div class="grid" id="enGrid"></div></div>
+<div class="card" id="enWordBox" style="display:none"></div>
+<p id="enVoiceNote" data-i18n="no_en_voice" style="display:none;text-align:center;color:#92400e;font-size:13.5px"></p>
+<div class="card"><h2 data-i18n="en_quiz_title">🎮 English Quiz</h2>
+<p data-i18n="en_quiz_q">Which word starts with this letter?</p>
+<div style="text-align:center;font-size:52px;color:#064e3b" id="enQuizLetter">A</div>
+<div id="enQuizOpts"></div>
+<p id="enQuizMsg"></p>
+<p><span data-i18n="stars_label">⭐ Stars:</span> <b id="enQuizStars">0</b></p>
+<button class="smallbtn green" onclick="nextEnQuiz()">Next question ➜</button></div>
+</section>
+
+<section id="surahs">
+<div class="card"><h2 data-i18n="surahs_title">📖 Short Surahs</h2>
+<p data-i18n="surahs_tap">Tap a verse to highlight it. Read slowly, one verse at a time.</p>
+<p class="bn">একটি আয়াতে ট্যাপ করলে সেটি হাইলাইট হবে। ধীরে ধীরে, এক আয়াত করে পড়ো।</p></div>
+<div id="surahList"></div>
+</section>
+
+<section id="duas">
+<div class="card"><h2 data-i18n="duas_title">🤲 Daily Duas</h2>
+<p data-i18n="duas_sub">Five duas every Muslim child should know. Read the Arabic, then the meaning.</p>
+<p class="bn">প্রতিদিনের পাঁচটি দোয়া — আরবি পড়ো, তারপর অর্থ পড়ো।</p></div>
+<div id="duaList"></div>
+</section>
+
+<section id="stories">
+<div class="card"><h2 data-i18n="stories_title">📚 Islamic Stories for Kids</h2>
+<p>True stories from the Quran and the life of Prophet Muhammad ﷺ, told simply for children.</p></div>
+<div id="storyList"></div>
+</section>
+
+<section id="progress">
+<div class="card"><h2 data-i18n="progress_title">⭐ My Progress</h2>
+<div class="stars" id="starRow">⭐</div>
+<p style="text-align:center"><span data-i18n="progress_1">You have earned</span> <b id="starCount">0</b> <span data-i18n="progress_2">stars from the alphabet quiz!</span></p>
+<p class="bn" style="text-align:center">তুমি হরফ কুইজ থেকে এতগুলো তারা পেয়েছো!</p>
+<p data-i18n="keep_playing">Keep playing the quiz to earn more stars. Stars are saved only on this phone — no account, no internet needed.</p>
+<button class="smallbtn" onclick="resetProgress()" data-i18n="reset_btn">Reset my progress</button></div>
+</section>
+
+<section id="about">
+<div class="card"><h2 data-i18n="about_title">ℹ️ About this app</h2>
+<p><b>Kids Quran Learning — Islamic Learning App for Children</b><br>Learn Quran, Arabic, Surahs &amp; Duas — fun for kids.</p>
+<p>Keywords: Quran, Islamic learning, kids Quran, learn Arabic, Surah, Dua, Islamic stories, Muslim kids.</p>
+<h3 data-i18n="privacy_title">Privacy Policy</h3>
+<p><span data-i18n="priv1">• This app collects <b>no personal data</b> and needs <b>no account</b>.</span><br>
+<span data-i18n="priv2">• Quiz stars are saved only on your own phone (localStorage).</span><br>
+<span data-i18n="priv3">• The app works offline and shows <b>no ads</b> in version 1.</span><br>
+<span data-i18n="priv4">• No location, contacts, photos or microphone are accessed.</span><br>
+<span data-i18n="priv5">• Children should always use this app with a parent or guardian.</span></p>
+<p class="bn">এই অ্যাপ কোনো তথ্য সংগ্রহ করে না, কোনো অ্যাকাউন্ট লাগে না, কোনো বিজ্ঞাপন নেই।</p></div>
+</section>
+
+</main>
+<footer>Kids Quran Learning v1.0 — Made with love for Muslim kids everywhere ❤️</footer>
+<script>
+// ---------- Languages (UI strings only — surah/dua Arabic text is never translated) ----------
+var LANGS={
+en:{lang_label:"Language",note_meanings:"Surah meanings are in English and Bengali for now.",welcome_title:"Assalamu Alaikum! 👋",welcome_text:"Welcome to <b>Kids Quran Learning</b> — a fun, safe way for children to learn the Quran, Arabic letters, short Surahs, daily Duas and beautiful Islamic stories.",nav_home:"🏠 Home",nav_alphabet:"🔤 Alphabet",nav_surahs:"📖 Surahs",nav_duas:"🤲 Duas",nav_stories:"📚 Stories",nav_progress:"⭐ My Progress",nav_about:"ℹ️ About",home_alphabet:"🔤 Arabic Alphabet",home_alphabet_sub:"Learn all 28 letters + fun quiz",home_surahs:"📖 Short Surahs",home_surahs_sub:"Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Kawthar",home_duas:"🤲 Daily Duas",home_duas_sub:"Eating, sleeping, home & parents",home_stories:"📚 Islamic Stories",home_stories_sub:"Prophet Yunus, Prophet Ibrahim & Al-Amin",keep_title:"⭐ Keep learning, keep shining",keep_text:"Play the alphabet quiz and earn stars. Your stars are saved on this phone only.",alphabet_title:"🔤 Arabic Alphabet — 28 Letters",alphabet_tap:"Tap a letter to hear it in Arabic, then its English name. Tap 🔊 to hear it again.",no_ar_voice:"Arabic voice not installed on this phone — English name is spoken instead.",quiz_title:"🎮 Letter Quiz",quiz_q:"What is the name of this letter?",stars_label:"⭐ Stars:",surahs_title:"📖 Short Surahs",surahs_tap:"Tap a verse to highlight it. Read slowly, one verse at a time.",duas_title:"🤲 Daily Duas",duas_sub:"Five duas every Muslim child should know. Read the Arabic, then the meaning.",stories_title:"📚 Islamic Stories for Kids",progress_title:"⭐ My Progress",progress_1:"You have earned",progress_2:"stars from the alphabet quiz!",keep_playing:"Keep playing the quiz to earn more stars. Stars are saved only on this phone — no account, no internet needed.",reset_btn:"Reset my progress",about_title:"ℹ️ About this app",privacy_title:"Privacy Policy",priv1:"• This app collects <b>no personal data</b> and needs <b>no account</b>.",priv2:"• Quiz stars are saved only on your own phone (localStorage).",priv3:"• The app works offline and shows <b>no ads</b> in version 1.",priv4:"• No location, contacts, photos or microphone are accessed.",priv5:"• Children should always use this app with a parent or guardian.",nav_bengali:"🇧🇩 Bengali",nav_english:"🔠 English",home_bengali:"🇧🇩 Bengali Alphabet",home_bengali_sub:"Vowels + consonants — 50 letters + quiz",home_english:"🔠 English Alphabet",home_english_sub:"A to Z + fun picture words + quiz",bn_title:"🇧🇩 Bengali Alphabet — 50 Letters",bn_tap:"Tap a letter to see its picture-word and hear the rhyme.",bn_vowel:"স্বরবর্ণ — Vowels (11)",bn_consonant:"ব্যঞ্জনবর্ণ — Consonants (39)",bn_quiz_title:"🎮 Bengali Quiz",bn_quiz_q:"Which word starts with this letter?",en_title:"🔠 English Alphabet — A to Z",en_tap:"Tap a letter to see its picture-word and hear the rhyme.",en_quiz_title:"🎮 English Quiz",en_quiz_q:"Which word starts with this letter?",no_bn_voice:"Bengali voice not installed on this phone — the rhyme is shown on screen.",no_en_voice:"English voice not installed on this phone — the rhyme is shown on screen."},
+bn:{lang_label:"ভাষা",note_meanings:"সূরার অর্থ আপাতত ইংরেজি ও বাংলায় আছে।",welcome_title:"আসসালামু আলাইকুম! 👋",welcome_text:"<b>কিডস কুরআন লার্নিং</b>-এ স্বাগতম — বাচ্চাদের জন্য কুরআন, আরবি হরফ, ছোট সূরা, দৈনিক দোয়া আর সুন্দর ইসলামিক গল্প শেখার মজার ও নিরাপদ উপায়।",nav_home:"🏠 হোম",nav_alphabet:"🔤 হরফ",nav_surahs:"📖 সূরা",nav_duas:"🤲 দোয়া",nav_stories:"📚 গল্প",nav_progress:"⭐ আমার অগ্রগতি",nav_about:"ℹ️ সম্পর্কে",home_alphabet:"🔤 আরবি হরফ",home_alphabet_sub:"২৮টি হরফ শেখো + মজার কুইজ",home_surahs:"📖 ছোট সূরা",home_surahs_sub:"আল-ফাতিহা, আল-ইখলাস, আল-ফালাক, আন-নাস, আল-কাওসার",home_duas:"🤲 দৈনিক দোয়া",home_duas_sub:"খাওয়া, ঘুম, ঘর ও বাবা-মা",home_stories:"📚 ইসলামিক গল্প",home_stories_sub:"নবী ইউনুস, নবী ইব্রাহিম ও আল-আমিন",keep_title:"⭐ শিখতে থাকো, জ্বলতে থাকো",keep_text:"হরফ কুইজ খেলো আর তারা জেতো। তোমার তারা শুধু এই ফোনেই থাকে।",alphabet_title:"🔤 আরবি হরফ — ২৮টি হরফ",alphabet_tap:"একটি হরফে ট্যাপ করো — আরবি উচ্চারণ শুনবে, তারপর ইংরেজি নাম। 🔊 চাপলে আবার শুনতে পারবে।",no_ar_voice:"এই ফোনে আরবি ভয়েস ইনস্টল নেই — তাই ইংরেজি নামটি শোনানো হচ্ছে।",quiz_title:"🎮 হরফ কুইজ",quiz_q:"এই হরফটির নাম কী?",stars_label:"⭐ তারা:",surahs_title:"📖 ছোট সূরা",surahs_tap:"একটি আয়াতে ট্যাপ করলে সেটি হাইলাইট হবে। ধীরে ধীরে, এক আয়াত করে পড়ো।",duas_title:"🤲 দৈনিক দোয়া",duas_sub:"প্রতিটি মুসলিম শিশুর জানা উচিত এমন পাঁচটি দোয়া। আরবি পড়ো, তারপর অর্থ পড়ো।",stories_title:"📚 শিশুদের জন্য ইসলামিক গল্প",progress_title:"⭐ আমার অগ্রগতি",progress_1:"তুমি পেয়েছো",progress_2:"টি তারা হরফ কুইজ থেকে!",keep_playing:"আরও তারা পেতে কুইজ খেলতে থাকো। তারা শুধু এই ফোনে থাকে — কোনো অ্যাকাউন্ট বা ইন্টারনেট লাগে না।",reset_btn:"আমার অগ্রগতি মুছে ফেলো",about_title:"ℹ️ অ্যাপ সম্পর্কে",privacy_title:"গোপনীয়তা নীতি",priv1:"• এই অ্যাপ কোনো ব্যক্তিগত তথ্য সংগ্রহ করে না, কোনো অ্যাকাউন্ট লাগে না।",priv2:"• কুইজের তারা শুধু তোমার নিজের ফোনে থাকে।",priv3:"• অ্যাপটি অফলাইনে চলে, প্রথম সংস্করণে কোনো বিজ্ঞাপন নেই।",priv4:"• অবস্থান, পরিচিতি, ছবি বা মাইক্রোফোন ব্যবহার করা হয় না।",priv5:"• শিশুরা সবসময় বাবা-মা বা অভিভাবকের সাথে এই অ্যাপ ব্যবহার করবে।",nav_bengali:"🇧🇩 বাংলা",nav_english:"🔠 ইংরেজি",home_bengali:"🇧🇩 বাংলা বর্ণমালা",home_bengali_sub:"স্বরবর্ণ + ব্যঞ্জনবর্ণ — ৫০টি বর্ণ + কুইজ",home_english:"🔠 ইংরেজি বর্ণমালা",home_english_sub:"A থেকে Z + মজার ছবি-শব্দ + কুইজ",bn_title:"🇧🇩 বাংলা বর্ণমালা — ৫০টি বর্ণ",bn_tap:"একটি বর্ণে ট্যাপ করো — ছবি-শব্দ দেখবে আর ছড়া শুনবে।",bn_vowel:"স্বরবর্ণ (১১টি)",bn_consonant:"ব্যঞ্জনবর্ণ (৩৯টি)",bn_quiz_title:"🎮 বাংলা কুইজ",bn_quiz_q:"এই বর্ণ দিয়ে কোন শব্দটি শুরু হয়?",en_title:"🔠 ইংরেজি বর্ণমালা — A থেকে Z",en_tap:"একটি বর্ণে ট্যাপ করো — ছবি-শব্দ দেখবে আর ছড়া শুনবে।",en_quiz_title:"🎮 ইংরেজি কুইজ",en_quiz_q:"এই বর্ণ দিয়ে কোন শব্দটি শুরু হয়?",no_bn_voice:"এই ফোনে বাংলা ভয়েস ইনস্টল নেই — ছড়াটি পর্দায় দেখানো হচ্ছে।",no_en_voice:"এই ফোনে ইংরেজি ভয়েস ইনস্টল নেই — ছড়াটি পর্দায় দেখানো হচ্ছে।"},
+ar:{lang_label:"اللغة",note_meanings:"معاني السور بالإنجليزية والبنغالية في الوقت الحالي.",welcome_title:"السلام عليكم! 👋",welcome_text:"مرحباً بكم في <b>تطبيق تعلّم القرآن للأطفال</b> — طريقة ممتعة وآمنة للأطفال لتعلّم القرآن والحروف العربية والسور القصيرة والأدعية اليومية والقصص الإسلامية الجميلة.",nav_home:"🏠 الرئيسية",nav_alphabet:"🔤 الحروف",nav_surahs:"📖 السور",nav_duas:"🤲 الأدعية",nav_stories:"📚 القصص",nav_progress:"⭐ تقدّمي",nav_about:"ℹ️ عن التطبيق",home_alphabet:"🔤 الحروف العربية",home_alphabet_sub:"تعلّم الحروف الـ٢٨ + اختبار ممتع",home_surahs:"📖 سور قصيرة",home_surahs_sub:"الفاتحة، الإخلاص، الفلق، الناس، الكوثر",home_duas:"🤲 أدعية يومية",home_duas_sub:"الأكل، النوم، البيت والوالدان",home_stories:"📚 قصص إسلامية",home_stories_sub:"النبي يونس، النبي إبراهيم والأمين",keep_title:"⭐ واصل التعلّم، واصل التألّق",keep_text:"العب اختبار الحروف واجمع النجوم. نجومك محفوظة على هذا الهاتف فقط.",alphabet_title:"🔤 الحروف العربية — ٢٨ حرفاً",alphabet_tap:"المس حرفاً لتسمع نطقه بالعربية ثم اسمه بالإنجليزية. المس 🔊 لإعادة الاستماع.",no_ar_voice:"الصوت العربي غير مثبّت على هذا الهاتف — يتم نطق الاسم الإنجليزي بدلاً منه.",quiz_title:"🎮 اختبار الحروف",quiz_q:"ما اسم هذا الحرف؟",stars_label:"⭐ النجوم:",surahs_title:"📖 سور قصيرة",surahs_tap:"المس آية لتمييزها. اقرأ ببطء، آية آية.",duas_title:"🤲 أدعية يومية",duas_sub:"خمسة أدعية يجب أن يعرفها كل طفل مسلم. اقرأ العربية ثم المعنى.",stories_title:"📚 قصص إسلامية للأطفال",progress_title:"⭐ تقدّمي",progress_1:"لقد جمعت",progress_2:"نجوم من اختبار الحروف!",keep_playing:"واصل لعب الاختبار لجمع المزيد من النجوم. النجوم محفوظة على هذا الهاتف فقط — لا حاجة لحساب أو إنترنت.",reset_btn:"إعادة تعيين تقدّمي",about_title:"ℹ️ عن التطبيق",privacy_title:"سياسة الخصوصية",priv1:"• هذا التطبيق لا يجمع أي بيانات شخصية ولا يحتاج إلى حساب.",priv2:"• نجوم الاختبار محفوظة على هاتفك فقط.",priv3:"• التطبيق يعمل دون إنترنت ولا يعرض إعلانات في الإصدار الأول.",priv4:"• لا يتم الوصول إلى الموقع أو جهات الاتصال أو الصور أو الميكروفون.",priv5:"• يجب أن يستخدم الأطفال هذا التطبيق دائماً مع أحد الوالدين أو ولي الأمر.",nav_bengali:"🇧🇩 البنغالية",nav_english:"🔠 الإنجليزية",home_bengali:"🇧🇩 الأبجدية البنغالية",home_bengali_sub:"حروف العلة + الحروف الساكنة — ٥٠ حرفاً + اختبار",home_english:"🔠 الأبجدية الإنجليزية",home_english_sub:"من A إلى Z + كلمات مصوّرة ممتعة + اختبار",bn_title:"🇧🇩 الأبجدية البنغالية — ٥٠ حرفاً",bn_tap:"المس حرفاً لرؤية الكلمة المصوّرة وسماع القافية.",bn_vowel:"حروف العلة (١١)",bn_consonant:"الحروف الساكنة (٣٩)",bn_quiz_title:"🎮 اختبار بنغالي",bn_quiz_q:"أي كلمة تبدأ بهذا الحرف؟",en_title:"🔠 الأبجدية الإنجليزية — من A إلى Z",en_tap:"المس حرفاً لرؤية الكلمة المصوّرة وسماع القافية.",en_quiz_title:"🎮 اختبار إنجليزي",en_quiz_q:"أي كلمة تبدأ بهذا الحرف؟",no_bn_voice:"الصوت البنغالي غير مثبّت على هذا الهاتف — القافية تظهر على الشاشة.",no_en_voice:"الصوت الإنجليزي غير مثبّت على هذا الهاتف — القافية تظهر على الشاشة."},
+ur:{lang_label:"زبان",note_meanings:"سورتوں کے معنی فی الحال انگریزی اور بنگالی میں ہیں۔",welcome_title:"السلام علیکم! 👋",welcome_text:"<b>کڈز قرآن لرننگ</b> میں خوش آمدید — بچوں کے لیے قرآن، عربی حروف، چھوٹی سورتیں، روزانہ کی دعائیں اور خوبصورت اسلامی کہانیاں سیکھنے کا مزے دار اور محفوظ طریقہ۔",nav_home:"🏠 ہوم",nav_alphabet:"🔤 حروف",nav_surahs:"📖 سورتیں",nav_duas:"🤲 دعائیں",nav_stories:"📚 کہانیاں",nav_progress:"⭐ میری پیش رفت",nav_about:"ℹ️ ایپ کے بارے میں",home_alphabet:"🔤 عربی حروف",home_alphabet_sub:"28 حروف سیکھیں + مزے دار کوئز",home_surahs:"📖 چھوٹی سورتیں",home_surahs_sub:"الفاتحہ، الاخلاص، الفلق، الناس، الکوثر",home_duas:"🤲 روزانہ کی دعائیں",home_duas_sub:"کھانا، سونا، گھر اور والدین",home_stories:"📚 اسلامی کہانیاں",home_stories_sub:"حضرت یونس، حضرت ابراہیم اور الامین",keep_title:"⭐ سیکھتے رہو، چمکتے رہو",keep_text:"حروف کا کوئز کھیلو اور ستارے جیتو۔ تمہارے ستارے صرف اس فون پر محفوظ ہیں۔",alphabet_title:"🔤 عربی حروف — 28 حروف",alphabet_tap:"کسی حرف پر ٹیپ کریں — پہلے عربی تلفظ سنیں، پھر انگریزی نام۔ 🔊 دبائیں تو دوبارہ سن سکتے ہیں۔",no_ar_voice:"اس فون پر عربی آواز انسٹال نہیں ہے — اس لیے انگریزی نام سنایا جا رہا ہے۔",quiz_title:"🎮 حروف کوئز",quiz_q:"اس حرف کا نام کیا ہے؟",stars_label:"⭐ ستارے:",surahs_title:"📖 چھوٹی سورتیں",surahs_tap:"آیت کو نمایاں کرنے کے لیے اس پر ٹیپ کریں۔ آہستہ پڑھیں، ایک آیت ایک وقت میں۔",duas_title:"🤲 روزانہ کی دعائیں",duas_sub:"پانچ دعائیں جو ہر مسلمان بچے کو معلوم ہونی چاہئیں۔ عربی پڑھیں، پھر معنی پڑھیں۔",stories_title:"📚 بچوں کے لیے اسلامی کہانیاں",progress_title:"⭐ میری پیش رفت",progress_1:"آپ نے حاصل کیے",progress_2:"ستارے حروف کوئز سے!",keep_playing:"مزید ستارے جیتنے کے لیے کوئز کھیلتے رہیں۔ ستارے صرف اس فون پر محفوظ ہیں — نہ اکاؤنٹ چاہیے، نہ انٹرنیٹ۔",reset_btn:"میری پیش رفت ختم کریں",about_title:"ℹ️ ایپ کے بارے میں",privacy_title:"پرائیویسی پالیسی",priv1:"• یہ ایپ کوئی ذاتی معلومات جمع نہیں کرتی اور اسے اکاؤنٹ کی ضرورت نہیں۔",priv2:"• کوئز کے ستارے صرف آپ کے اپنے فون پر محفوظ ہیں۔",priv3:"• ایپ آف لائن چلتی ہے اور پہلے ورژن میں کوئی اشتہار نہیں۔",priv4:"• مقام، رابطے، تصاویر یا مائیکروفون تک رسائی نہیں لی جاتی۔",priv5:"• بچے ہمیشہ والدین یا سرپرست کے ساتھ یہ ایپ استعمال کریں۔",nav_bengali:"🇧🇩 بنگالی",nav_english:"🔠 انگریزی",home_bengali:"🇧🇩 بنگالی حروف تہجی",home_bengali_sub:"مصوتے + مصمتے — 50 حروف + کوئز",home_english:"🔠 انگریزی حروف تہجی",home_english_sub:"A سے Z تک + مزے دار تصویری الفاظ + کوئز",bn_title:"🇧🇩 بنگالی حروف تہجی — 50 حروف",bn_tap:"کسی حرف پر ٹیپ کریں — تصویری لفظ دیکھیں اور نظم سنیں۔",bn_vowel:"مصوتے (11)",bn_consonant:"مصمتے (39)",bn_quiz_title:"🎮 بنگالی کوئز",bn_quiz_q:"اس حرف سے کون سا لفظ شروع ہوتا ہے؟",en_title:"🔠 انگریزی حروف تہجی — A سے Z",en_tap:"کسی حرف پر ٹیپ کریں — تصویری لفظ دیکھیں اور نظم سنیں۔",en_quiz_title:"🎮 انگریزی کوئز",en_quiz_q:"اس حرف سے کون سا لفظ شروع ہوتا ہے؟",no_bn_voice:"اس فون پر بنگالی آواز انسٹال نہیں ہے — نظم اسکرین پر دکھائی جا رہی ہے۔",no_en_voice:"اس فون پر انگریزی آواز انسٹال نہیں ہے — نظم اسکرین پر دکھائی جا رہی ہے۔"},
+id:{lang_label:"Bahasa",note_meanings:"Arti surah saat ini tersedia dalam bahasa Inggris dan Bengali.",welcome_title:"Assalamu Alaikum! 👋",welcome_text:"Selamat datang di <b>Kids Quran Learning</b> — cara yang menyenangkan dan aman bagi anak-anak untuk belajar Al-Quran, huruf Arab, surah pendek, doa harian, dan kisah Islam yang indah.",nav_home:"🏠 Beranda",nav_alphabet:"🔤 Huruf",nav_surahs:"📖 Surah",nav_duas:"🤲 Doa",nav_stories:"📚 Kisah",nav_progress:"⭐ Kemajuanku",nav_about:"ℹ️ Tentang",home_alphabet:"🔤 Huruf Arab",home_alphabet_sub:"Pelajari 28 huruf + kuis seru",home_surahs:"📖 Surah Pendek",home_surahs_sub:"Al-Fatihah, Al-Ikhlas, Al-Falaq, An-Nas, Al-Kautsar",home_duas:"🤲 Doa Harian",home_duas_sub:"Makan, tidur, rumah & orang tua",home_stories:"📚 Kisah Islam",home_stories_sub:"Nabi Yunus, Nabi Ibrahim & Al-Amin",keep_title:"⭐ Terus belajar, terus bersinar",keep_text:"Mainkan kuis huruf dan kumpulkan bintang. Bintangmu hanya tersimpan di ponsel ini.",alphabet_title:"🔤 Huruf Arab — 28 Huruf",alphabet_tap:"Ketuk huruf untuk mendengar pengucapannya dalam bahasa Arab, lalu namanya dalam bahasa Inggris. Ketuk 🔊 untuk mendengar lagi.",no_ar_voice:"Suara Arab tidak terpasang di ponsel ini — nama dalam bahasa Inggris yang dibacakan.",quiz_title:"🎮 Kuis Huruf",quiz_q:"Apa nama huruf ini?",stars_label:"⭐ Bintang:",surahs_title:"📖 Surah Pendek",surahs_tap:"Ketuk ayat untuk menandainya. Baca perlahan, satu ayat demi satu ayat.",duas_title:"🤲 Doa Harian",duas_sub:"Lima doa yang harus diketahui setiap anak Muslim. Baca bahasa Arabnya, lalu artinya.",stories_title:"📚 Kisah Islam untuk Anak",progress_title:"⭐ Kemajuanku",progress_1:"Kamu mendapat",progress_2:"bintang dari kuis huruf!",keep_playing:"Terus mainkan kuis untuk mendapat lebih banyak bintang. Bintang hanya tersimpan di ponsel ini — tanpa akun, tanpa internet.",reset_btn:"Hapus kemajuanku",about_title:"ℹ️ Tentang aplikasi ini",privacy_title:"Kebijakan Privasi",priv1:"• Aplikasi ini tidak mengumpulkan data pribadi dan tidak memerlukan akun.",priv2:"• Bintang kuis hanya tersimpan di ponselmu sendiri.",priv3:"• Aplikasi bekerja offline dan tidak menampilkan iklan di versi 1.",priv4:"• Tidak ada akses ke lokasi, kontak, foto, atau mikrofon.",priv5:"• Anak-anak harus selalu menggunakan aplikasi ini bersama orang tua atau wali.",nav_bengali:"🇧🇩 Bengali",nav_english:"🔠 Inggris",home_bengali:"🇧🇩 Alfabet Bengali",home_bengali_sub:"Vokal + konsonan — 50 huruf + kuis",home_english:"🔠 Alfabet Inggris",home_english_sub:"A sampai Z + kata bergambar seru + kuis",bn_title:"🇧🇩 Alfabet Bengali — 50 Huruf",bn_tap:"Ketuk huruf untuk mendengar kata bergambar dan rima.",bn_vowel:"Vokal (11)",bn_consonant:"Konsonan (39)",bn_quiz_title:"🎮 Kuis Bengali",bn_quiz_q:"Kata apa yang dimulai dengan huruf ini?",en_title:"🔠 Alfabet Inggris — A sampai Z",en_tap:"Ketuk huruf untuk mendengar kata bergambar dan rima.",en_quiz_title:"🎮 Kuis Inggris",en_quiz_q:"Kata apa yang dimulai dengan huruf ini?",no_bn_voice:"Suara Bengali tidak terpasang di ponsel ini — rima ditampilkan di layar.",no_en_voice:"Suara Inggris tidak terpasang di ponsel ini — rima ditampilkan di layar."},
+tr:{lang_label:"Dil",note_meanings:"Sure anlamları şimdilik İngilizce ve Bengalce olarak mevcuttur.",welcome_title:"Selamun Aleyküm! 👋",welcome_text:"<b>Kids Quran Learning</b>'e hoş geldiniz — çocukların Kuran'ı, Arap harflerini, kısa sureleri, günlük duaları ve güzel İslami hikâyeleri öğrenmesi için eğlenceli ve güvenli bir yol.",nav_home:"🏠 Ana Sayfa",nav_alphabet:"🔤 Alfabe",nav_surahs:"📖 Sureler",nav_duas:"🤲 Dualar",nav_stories:"📚 Hikâyeler",nav_progress:"⭐ İlerlemem",nav_about:"ℹ️ Hakkında",home_alphabet:"🔤 Arap Alfabesi",home_alphabet_sub:"28 harfi öğren + eğlenceli test",home_surahs:"📖 Kısa Sureler",home_surahs_sub:"Fatiha, İhlas, Felak, Nas, Kevser",home_duas:"🤲 Günlük Dualar",home_duas_sub:"Yemek, uyku, ev ve anne baba",home_stories:"📚 İslami Hikâyeler",home_stories_sub:"Yunus Peygamber, İbrahim Peygamber ve El-Emin",keep_title:"⭐ Öğrenmeye devam et, parlamaya devam et",keep_text:"Harf testini oyna ve yıldız kazan. Yıldızların yalnızca bu telefonda saklanır.",alphabet_title:"🔤 Arap Alfabesi — 28 Harf",alphabet_tap:"Bir harfe dokun, Arapça okunuşunu, sonra İngilizce adını dinle. Tekrar dinlemek için 🔊 simgesine dokun.",no_ar_voice:"Bu telefonda Arapça ses yüklü değil — bunun yerine İngilizce adı okunuyor.",quiz_title:"🎮 Harf Testi",quiz_q:"Bu harfin adı nedir?",stars_label:"⭐ Yıldız:",surahs_title:"📖 Kısa Sureler",surahs_tap:"Bir ayeti vurgulamak için dokun. Yavaş oku, bir seferde bir ayet.",duas_title:"🤲 Günlük Dualar",duas_sub:"Her Müslüman çocuğun bilmesi gereken beş dua. Önce Arapçasını, sonra anlamını oku.",stories_title:"📚 Çocuklar için İslami Hikâyeler",progress_title:"⭐ İlerlemem",progress_1:"Harf testinden",progress_2:"yıldız kazandın!",keep_playing:"Daha fazla yıldız kazanmak için testi oynamaya devam et. Yıldızlar yalnızca bu telefonda saklanır — hesap veya internet gerekmez.",reset_btn:"İlerlememi sıfırla",about_title:"ℹ️ Bu uygulama hakkında",privacy_title:"Gizlilik Politikası",priv1:"• Bu uygulama kişisel veri toplamaz ve hesap gerektirmez.",priv2:"• Test yıldızları yalnızca kendi telefonunda saklanır.",priv3:"• Uygulama çevrimdışı çalışır ve 1. sürümde reklam göstermez.",priv4:"• Konum, kişiler, fotoğraflar veya mikrofona erişilmez.",priv5:"• Çocuklar bu uygulamayı her zaman bir ebeveyn veya veli ile kullanmalıdır.",nav_bengali:"🇧🇩 Bengalce",nav_english:"🔠 İngilizce",home_bengali:"🇧🇩 Bengal Alfabesi",home_bengali_sub:"Ünlüler + ünsüzler — 50 harf + test",home_english:"🔠 İngiliz Alfabesi",home_english_sub:"A'dan Z'ye + eğlenceli resimli kelimeler + test",bn_title:"🇧🇩 Bengal Alfabesi — 50 Harf",bn_tap:"Resimli kelimeyi görmek ve kafiyeyi duymak için bir harfe dokun.",bn_vowel:"Ünlüler (11)",bn_consonant:"Ünsüzler (39)",bn_quiz_title:"🎮 Bengalce Testi",bn_quiz_q:"Bu harfle hangi kelime başlar?",en_title:"🔠 İngiliz Alfabesi — A'dan Z'ye",en_tap:"Resimli kelimeyi görmek ve kafiyeyi duymak için bir harfe dokun.",en_quiz_title:"🎮 İngilizce Testi",en_quiz_q:"Bu harfle hangi kelime başlar?",no_bn_voice:"Bu telefonda Bengalce ses yüklü değil — kafiye ekranda gösteriliyor.",no_en_voice:"Bu telefonda İngilizce ses yüklü değil — kafiye ekranda gösteriliyor."},
+fr:{lang_label:"Langue",note_meanings:"Les significations des sourates sont pour l'instant en anglais et en bengali.",welcome_title:"Assalamu Alaikum ! 👋",welcome_text:"Bienvenue sur <b>Kids Quran Learning</b> — une façon amusante et sûre pour les enfants d'apprendre le Coran, les lettres arabes, les courtes sourates, les douas quotidiennes et de belles histoires islamiques.",nav_home:"🏠 Accueil",nav_alphabet:"🔤 Alphabet",nav_surahs:"📖 Sourates",nav_duas:"🤲 Douas",nav_stories:"📚 Histoires",nav_progress:"⭐ Mes progrès",nav_about:"ℹ️ À propos",home_alphabet:"🔤 Alphabet arabe",home_alphabet_sub:"Apprends les 28 lettres + quiz amusant",home_surahs:"📖 Courtes sourates",home_surahs_sub:"Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Kawthar",home_duas:"🤲 Douas quotidiennes",home_duas_sub:"Manger, dormir, maison et parents",home_stories:"📚 Histoires islamiques",home_stories_sub:"Prophète Younous, Prophète Ibrahim et Al-Amin",keep_title:"⭐ Continue à apprendre, continue à briller",keep_text:"Joue au quiz des lettres et gagne des étoiles. Tes étoiles sont enregistrées uniquement sur ce téléphone.",alphabet_title:"🔤 Alphabet arabe — 28 lettres",alphabet_tap:"Touche une lettre pour entendre sa prononciation en arabe, puis son nom en anglais. Touche 🔊 pour réécouter.",no_ar_voice:"La voix arabe n'est pas installée sur ce téléphone — c'est le nom anglais qui est lu à la place.",quiz_title:"🎮 Quiz des lettres",quiz_q:"Quel est le nom de cette lettre ?",stars_label:"⭐ Étoiles :",surahs_title:"📖 Courtes sourates",surahs_tap:"Touche un verset pour le surligner. Lis lentement, un verset à la fois.",duas_title:"🤲 Douas quotidiennes",duas_sub:"Cinq douas que chaque enfant musulman doit connaître. Lis l'arabe, puis le sens.",stories_title:"📚 Histoires islamiques pour enfants",progress_title:"⭐ Mes progrès",progress_1:"Tu as gagné",progress_2:"étoiles au quiz des lettres !",keep_playing:"Continue à jouer au quiz pour gagner plus d'étoiles. Les étoiles sont enregistrées uniquement sur ce téléphone — pas besoin de compte ni d'internet.",reset_btn:"Réinitialiser mes progrès",about_title:"ℹ️ À propos de l'application",privacy_title:"Politique de confidentialité",priv1:"• Cette application ne collecte aucune donnée personnelle et ne nécessite aucun compte.",priv2:"• Les étoiles du quiz sont enregistrées uniquement sur ton téléphone.",priv3:"• L'application fonctionne hors ligne et n'affiche aucune publicité dans la version 1.",priv4:"• Aucun accès à la localisation, aux contacts, aux photos ou au microphone.",priv5:"• Les enfants doivent toujours utiliser cette application avec un parent ou un tuteur.",nav_bengali:"🇧🇩 Bengali",nav_english:"🔠 Anglais",home_bengali:"🇧🇩 Alphabet bengali",home_bengali_sub:"Voyelles + consonnes — 50 lettres + quiz",home_english:"🔠 Alphabet anglais",home_english_sub:"De A à Z + mots illustrés amusants + quiz",bn_title:"🇧🇩 Alphabet bengali — 50 lettres",bn_tap:"Touche une lettre pour voir son mot illustré et entendre la rime.",bn_vowel:"Voyelles (11)",bn_consonant:"Consonnes (39)",bn_quiz_title:"🎮 Quiz bengali",bn_quiz_q:"Quel mot commence par cette lettre ?",en_title:"🔠 Alphabet anglais — de A à Z",en_tap:"Touche une lettre pour voir son mot illustré et entendre la rime.",en_quiz_title:"🎮 Quiz anglais",en_quiz_q:"Quel mot commence par cette lettre ?",no_bn_voice:"La voix bengali n'est pas installée sur ce téléphone — la rime s'affiche à l'écran.",no_en_voice:"La voix anglaise n'est pas installée sur ce téléphone — la rime s'affiche à l'écran."},
+es:{lang_label:"Idioma",note_meanings:"Los significados de las suras están por ahora en inglés y bengalí.",welcome_title:"¡Assalamu Alaikum! 👋",welcome_text:"Bienvenido a <b>Kids Quran Learning</b> — una forma divertida y segura para que los niños aprendan el Corán, las letras árabes, las suras cortas, las duas diarias y hermosas historias islámicas.",nav_home:"🏠 Inicio",nav_alphabet:"🔤 Alfabeto",nav_surahs:"📖 Suras",nav_duas:"🤲 Duas",nav_stories:"📚 Historias",nav_progress:"⭐ Mi progreso",nav_about:"ℹ️ Acerca de",home_alphabet:"🔤 Alfabeto árabe",home_alphabet_sub:"Aprende las 28 letras + quiz divertido",home_surahs:"📖 Suras cortas",home_surahs_sub:"Al-Fatiha, Al-Ikhlas, Al-Falaq, An-Nas, Al-Kawthar",home_duas:"🤲 Duas diarias",home_duas_sub:"Comer, dormir, hogar y padres",home_stories:"📚 Historias islámicas",home_stories_sub:"Profeta Yunus, Profeta Ibrahim y Al-Amin",keep_title:"⭐ Sigue aprendiendo, sigue brillando",keep_text:"Juega al quiz de letras y gana estrellas. Tus estrellas solo se guardan en este teléfono.",alphabet_title:"🔤 Alfabeto árabe — 28 letras",alphabet_tap:"Toca una letra para escuchar su pronunciación en árabe y luego su nombre en inglés. Toca 🔊 para escucharla de nuevo.",no_ar_voice:"La voz árabe no está instalada en este teléfono — se lee el nombre en inglés en su lugar.",quiz_title:"🎮 Quiz de letras",quiz_q:"¿Cómo se llama esta letra?",stars_label:"⭐ Estrellas:",surahs_title:"📖 Suras cortas",surahs_tap:"Toca un versículo para resaltarlo. Lee despacio, un versículo a la vez.",duas_title:"🤲 Duas diarias",duas_sub:"Cinco duas que todo niño musulmán debe conocer. Lee el árabe y luego el significado.",stories_title:"📚 Historias islámicas para niños",progress_title:"⭐ Mi progreso",progress_1:"¡Has ganado",progress_2:"estrellas en el quiz de letras!",keep_playing:"Sigue jugando al quiz para ganar más estrellas. Las estrellas solo se guardan en este teléfono — no necesitas cuenta ni internet.",reset_btn:"Borrar mi progreso",about_title:"ℹ️ Acerca de esta aplicación",privacy_title:"Política de privacidad",priv1:"• Esta aplicación no recopila datos personales y no necesita cuenta.",priv2:"• Las estrellas del quiz solo se guardan en tu propio teléfono.",priv3:"• La aplicación funciona sin conexión y no muestra anuncios en la versión 1.",priv4:"• No se accede a la ubicación, los contactos, las fotos ni el micrófono.",priv5:"• Los niños deben usar siempre esta aplicación con un padre, madre o tutor.",nav_bengali:"🇧🇩 Bengalí",nav_english:"🔠 Inglés",home_bengali:"🇧🇩 Alfabeto bengalí",home_bengali_sub:"Vocales + consonantes — 50 letras + quiz",home_english:"🔠 Alfabeto inglés",home_english_sub:"De la A a la Z + palabras con dibujos + quiz",bn_title:"🇧🇩 Alfabeto bengalí — 50 letras",bn_tap:"Toca una letra para ver su palabra con dibujo y escuchar la rima.",bn_vowel:"Vocales (11)",bn_consonant:"Consonantes (39)",bn_quiz_title:"🎮 Quiz bengalí",bn_quiz_q:"¿Qué palabra empieza con esta letra?",en_title:"🔠 Alfabeto inglés — de la A a la Z",en_tap:"Toca una letra para ver su palabra con dibujo y escuchar la rima.",en_quiz_title:"🎮 Quiz inglés",en_quiz_q:"¿Qué palabra empieza con esta letra?",no_bn_voice:"La voz bengalí no está instalada en este teléfono — la rima se muestra en pantalla.",no_en_voice:"La voz inglesa no está instalada en este teléfono — la rima se muestra en pantalla."}
+};
+var RTL_LANGS={ar:1,ur:1};
+var currentLang='en';
+function setLang(code){
+  if(!LANGS[code]) code='en';
+  currentLang=code;
+  var t=LANGS[code];
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    if(t[k]!==undefined){ el.innerHTML=t[k]; el.dir = RTL_LANGS[code] ? 'rtl' : ''; }
+  });
+  document.documentElement.lang=code;
+  try{ localStorage.setItem('kids-quran-lang',code); }catch(e){}
+  var sel=document.getElementById('langSelect'); if(sel) sel.value=code;
+}
+(function(){ var saved=null; try{ saved=localStorage.getItem('kids-quran-lang'); }catch(e){} setLang(saved||'en'); })();
+
+// ---------- Tabs ----------
+function showTab(id){
+  document.querySelectorAll('main section').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('#nav button').forEach(function(b){b.classList.toggle('active', b.dataset.tab===id);});
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.tab);});});
+
+// ---------- Progress (localStorage only) ----------
+function getStars(){return parseInt(localStorage.getItem('kq_stars')||'0',10)||0;}
+function setStars(n){localStorage.setItem('kq_stars',String(n));// ---------- Bengali Alphabet: 11 vowels + 39 consonants = 50 ----------
+// Each entry: [letter, picture-word, emoji, rhyme]
+var BN_VOWELS=[
+['অ','অজগর','🐍','অজগরটি আসছে তেড়ে'],
+['আ','আম','🥭','আম পেকেছে গাছে গাছে'],
+['ই','ইঁদুর','🐭','ইঁদুর ছানা দৌড়ে বেড়ায়'],
+['ঈ','ঈগল','🦅','ঈগল উড়ে আকাশ পারে'],
+['উ','উট','🐫','উট চলেছে মরুর পথে'],
+['ঊ','ঊষা','🌅','ঊষা আসে ভোরের আলোয়'],
+['ঋ','ঋষি','🧘','ঋষি বসে ধ্যানে মগন'],
+['এ','একতারা','🎵','একতারা বাজে টুং টাং'],
+['ঐ','ঐরাবত','🐘','ঐরাবত সাদা হাতি'],
+['ও','ওল','🥔','ওল খেতে বেশ মজা'],
+['ঔ','ঔষধ','💊','ঔষধ খেলে সেরে ওঠে']
+];
+var BN_CONS=[
+['ক','কলা','🍌','কলা খেতে মিষ্টি ভারি'],
+['খ','খরগোশ','🐰','খরগোশ লাফায় দৌড়ে দৌড়ে'],
+['গ','গরু','🐄','গরু ডাকে হাম্বা হাম্বা'],
+['ঘ','ঘড়ি','🕐','ঘড়ি বলে টিক টিক টিক'],
+['ঙ','রঙ','🌈','রঙ দিয়ে ছবি আঁকি'],
+['চ','চাঁদ','🌙','চাঁদ হাসে আকাশে'],
+['ছ','ছাতা','☂️','ছাতা মাথায় বৃষ্টি যায়'],
+['জ','জল','💧','জল খেলে প্রাণ জুড়ায়'],
+['ঝ','ঝরনা','💦','ঝরনা ঝরে পাহাড় থেকে'],
+['ঞ','মিঞা','👨','মিঞা সাহেব হাসেন'],
+['ট','টমেটো','🍅','টমেটো লাল টুকটুকে'],
+['ঠ','ঠোঁট','👄','ঠোঁট দিয়ে হাসি ফোটে'],
+['ড','ডিম','🥚','ডিম থেকে ছানা ফোটে'],
+['ঢ','ঢোল','🥁','ঢোল বাজে ঢম ঢম'],
+['ণ','বীণা','🎻','বীণা বাজে সুরে সুরে'],
+['ত','তাল','🌴','তাল গাছে তাল ধরে'],
+['থ','থালা','🍽️','থালা ভরা ভাত'],
+['দ','দই','🥛','দই খেতে মিষ্টি ভারি'],
+['ধ','ধান','🌾','ধান পেকেছে মাঠে মাঠে'],
+['ন','নৌকা','⛵','নৌকা ভাসে নদীতে'],
+['প','পাখি','🐦','পাখি গায় মধুর গান'],
+['ফ','ফুল','🌸','ফুল ফোটে বাগানে'],
+['ব','বই','📖','বই পড়ে জ্ঞান বাড়ে'],
+['ভ','ভাত','🍚','ভাত খেয়ে শক্তি পাই'],
+['ম','মাছ','🐟','মাছ সাঁতারে পানিতে'],
+['য','যাদু','✨','যাদু দেখে সবাই অবাক'],
+['র','রংধনু','🌈','রংধনু ওঠে আকাশে'],
+['ল','লেবু','🍋','লেবু খেতে টক মিষ্টি'],
+['শ','শাপলা','🪷','শাপলা ফোটে পুকুরে'],
+['ষ','ষাঁড়','🐂','ষাঁড় ছোটে মাঠে মাঠে'],
+['স','সূর্য','☀️','সূর্য ওঠে পূব আকাশে'],
+['হ','হাতি','🐘','হাতি চলে ধীরে ধীরে'],
+['ড়','গাড়ি','🚗','গাড়ি ছোটে রাস্তায়'],
+['ঢ়','আষাঢ়','🌧️','আষাঢ় মাসে বৃষ্টি নামে'],
+['য়','ময়ূর','🦚','ময়ূর নাচে পেখম মেলে'],
+['ৎ','হঠাৎ','🌟','হঠাৎ করে বৃষ্টি এলো'],
+['ং','বাংলা','🇧🇩','বাংলা আমার মায়ের ভাষা'],
+['ঃ','দুঃখ','💧','দুঃখ পেলে কাঁদতে নেই'],
+['ঁ','আঁকা','🎨','আঁকা ছবি রঙিন ভারি']
+];
+var BN_LETTERS=BN_VOWELS.concat(BN_CONS);
+
+// ---------- English Alphabet: A-Z (26) ----------
+// Each entry: [letter pair, picture-word, emoji, rhyme]
+var EN_LETTERS=[
+['Aa','Apple','🍎','A is for Apple, red and sweet!'],
+['Bb','Ball','⚽','B is for Ball, bounce it high!'],
+['Cc','Cat','🐱','C is for Cat, soft and furry!'],
+['Dd','Dog','🐶','D is for Dog, woof woof!'],
+['Ee','Egg','🥚','E is for Egg, round and white!'],
+['Ff','Fish','🐟','F is for Fish, swim swim swim!'],
+['Gg','Grapes','🍇','G is for Grapes, juicy and sweet!'],
+['Hh','Hen','🐔','H is for Hen, cluck cluck cluck!'],
+['Ii','Ice cream','🍦','I is for Ice cream, cold and yummy!'],
+['Jj','Jug','🏺','J is for Jug, pour the juice!'],
+['Kk','Kite','🪁','K is for Kite, fly it high!'],
+['Ll','Lion','🦁','L is for Lion, roar!'],
+['Mm','Mango','🥭','M is for Mango, sweet and gold!'],
+['Nn','Nest','🪹','N is for Nest, cozy and warm!'],
+['Oo','Orange','🍊','O is for Orange, juicy and bright!'],
+['Pp','Parrot','🦜','P is for Parrot, talk talk talk!'],
+['Qq','Queen','👑','Q is for Queen, wear the crown!'],
+['Rr','Rabbit','🐰','R is for Rabbit, hop hop hop!'],
+['Ss','Sun','☀️','S is for Sun, shining bright!'],
+['Tt','Tiger','🐯','T is for Tiger, grr!'],
+['Uu','Umbrella','☂️','U is for Umbrella, rain rain go away!'],
+['Vv','Van','🚐','V is for Van, beep beep!'],
+['Ww','Watch','⌚','W is for Watch, tick tock!'],
+['Xx','Xylophone','🎶','X is for Xylophone, ding ding dong!'],
+['Yy','Yak','🐂','Y is for Yak, big and strong!'],
+['Zz','Zebra','🦓','Z is for Zebra, black and white!']
+];
+
+// ---------- Shared picture-word display + speech ----------
+function hasVoice(prefix){
+  if(!('speechSynthesis' in window)) return false;
+  var vs=window.speechSynthesis.getVoices();
+  if(vs.length===0) return null; // voices not loaded yet — unknown
+  for(var i=0;i<vs.length;i++){ if(vs[i].lang && vs[i].lang.toLowerCase().indexOf(prefix)===0) return true; }
+  return false;
+}
+function speakText(text,lang,noteId,noteKey){
+  if(!('speechSynthesis' in window)){alert('Sorry, read-aloud is not available on this device.');return;}
+  var note=noteId?document.getElementById(noteId):null;
+  window.speechSynthesis.cancel();
+  var hv=hasVoice(lang.split('-')[0]);
+  if(note){ if(hv===false){ note.textContent=(LANGS[currentLang]||LANGS.en)[noteKey]; note.style.display='block'; } else { note.style.display='none'; } }
+  var u=new SpeechSynthesisUtterance(text); u.lang=lang; u.rate=0.8;
+  window.speechSynthesis.speak(u);
+}
+function showWord(boxId,emoji,word,rhyme){
+  var box=document.getElementById(boxId);
+  box.style.display='block';
+  box.innerHTML='<div class="wordemoji pop">'+emoji+'</div><div class="wordbig">'+word+'</div><div class="wordrhyme">'+rhyme+'</div>';
+  var em=box.querySelector('.wordemoji');
+  em.classList.remove('pop'); void em.offsetWidth; em.classList.add('pop');
+}
+function renderLetterGrid(elId,arr,offset,clickFn){
+  var g=document.getElementById(elId);
+  arr.forEach(function(L,i){
+    var d=document.createElement('div'); d.className='letter';
+    d.innerHTML='<b style="font-family:inherit">'+L[0]+'</b><span class="wd">'+L[1]+'</span>';
+    d.onclick=function(){clickFn(offset+i);};
+    g.appendChild(d);
+  });
+}
+
+// ---------- Bengali ----------
+renderLetterGrid('bnVowelGrid',BN_VOWELS,0,showBnLetter);
+renderLetterGrid('bnConsGrid',BN_CONS,BN_VOWELS.length,showBnLetter);
+function showBnLetter(i){
+  var L=BN_LETTERS[i];
+  showWord('bnWordBox',L[2],L[0]+' — '+L[1],L[3]);
+  speakText(L[0]+'। '+L[1]+'। '+L[3],'bn-BD','bnVoiceNote','no_bn_voice');
+}
+var bnQuizAnswer=null, bnQuizLocked=false;
+function nextBnQuiz(){
+  bnQuizLocked=false; document.getElementById('bnQuizMsg').textContent='';
+  var idx=Math.floor(Math.random()*BN_LETTERS.length);
+  bnQuizAnswer=BN_LETTERS[idx][1];
+  document.getElementById('bnQuizLetter').textContent=BN_LETTERS[idx][0];
+  var opts=new Set([bnQuizAnswer]);
+  while(opts.size<4){ opts.add(BN_LETTERS[Math.floor(Math.random()*BN_LETTERS.length)][1]); }
+  var arr=Array.from(opts).sort(function(){return Math.random()-0.5;});
+  var box=document.getElementById('bnQuizOpts'); box.innerHTML='';
+  arr.forEach(function(name){
+    var b=document.createElement('button'); b.className='quizopt'; b.textContent=name;
+    b.onclick=function(){
+      if(bnQuizLocked) return; bnQuizLocked=true;
+      if(name===bnQuizAnswer){ b.classList.add('correct'); setStars(getStars()+1);
+        document.getElementById('bnQuizMsg').textContent='✅ Correct! You earned a star!'; }
+      else { b.classList.add('wrong');
+        document.getElementById('bnQuizMsg').textContent='❌ Not quite — the answer is '+bnQuizAnswer+'. Try the next one!'; }
+    };
+    box.appendChild(b);
+  });
+}
+nextBnQuiz();
+
+// ---------- English ----------
+renderLetterGrid('enGrid',EN_LETTERS,0,showEnLetter);
+function showEnLetter(i){
+  var L=EN_LETTERS[i];
+  showWord('enWordBox',L[2],L[0]+' — '+L[1],L[3]);
+  speakText(L[0].charAt(0)+'. '+L[1]+'. '+L[3],'en-US','enVoiceNote','no_en_voice');
+}
+var enQuizAnswer=null, enQuizLocked=false;
+function nextEnQuiz(){
+  enQuizLocked=false; document.getElementById('enQuizMsg').textContent='';
+  var idx=Math.floor(Math.random()*EN_LETTERS.length);
+  enQuizAnswer=EN_LETTERS[idx][1];
+  document.getElementById('enQuizLetter').textContent=EN_LETTERS[idx][0].charAt(0);
+  var opts=new Set([enQuizAnswer]);
+  while(opts.size<4){ opts.add(EN_LETTERS[Math.floor(Math.random()*EN_LETTERS.length)][1]); }
+  var arr=Array.from(opts).sort(function(){return Math.random()-0.5;});
+  var box=document.getElementById('enQuizOpts'); box.innerHTML='';
+  arr.forEach(function(name){
+    var b=document.createElement('button'); b.className='quizopt'; b.textContent=name;
+    b.onclick=function(){
+      if(enQuizLocked) return; enQuizLocked=true;
+      if(name===enQuizAnswer){ b.classList.add('correct'); setStars(getStars()+1);
+        document.getElementById('enQuizMsg').textContent='✅ Correct! You earned a star!'; }
+      else { b.classList.add('wrong');
+        document.getElementById('enQuizMsg').textContent='❌ Not quite — the answer is '+enQuizAnswer+'. Try the next one!'; }
+    };
+    box.appendChild(b);
+  });
+}
+nextEnQuiz();
+
+updateStars();}
+function updateStars(){
+  var n=getStars();
+  document.getElementById('starCount').textContent=n;
+  var q=document.getElementById('quizStars'); if(q) q.textContent=n;
+  var qb=document.getElementById('bnQuizStars'); if(qb) qb.textContent=n;
+  var qe=document.getElementById('enQuizStars'); if(qe) qe.textContent=n;
+  document.getElementById('starRow').textContent = n>0 ? '⭐'.repeat(Math.min(n,20)) : '⭐ — play the quiz to earn stars!';
+}
+function resetProgress(){ if(confirm('Reset all your stars?')){ setStars(0); alert('Progress reset.'); } }
+
+// ---------- Arabic Alphabet (28 letters) ----------
+var LETTERS=[
+['ا','Alif','আলিফ'],['ب','Ba','বা'],['ت','Ta','তা'],['ث','Tha','ছা'],['ج','Jeem','জিম'],
+['ح','Ha','হা'],['خ','Kha','খা'],['د','Dal','দাল'],['ذ','Dhal','জাল'],['ر','Ra','রা'],
+['ز','Za','জা'],['س','Seen','সিন'],['ش','Sheen','শিন'],['ص','Sad','সদ'],['ض','Dad','দদ'],
+['ط','Ta','ত'],['ظ','Dha','জ'],['ع','Ain','আইন'],['غ','Ghain','গইন'],['ف','Fa','ফা'],
+['ق','Qaf','কফ'],['ك','Kaf','কাফ'],['ل','Lam','লাম'],['م','Meem','মিম'],['ن','Noon','নুন'],
+['ه','Ha','হা'],['و','Waw','ওয়াও'],['ي','Ya','ইয়া']
+];
+var grid=document.getElementById('letterGrid');
+LETTERS.forEach(function(L,i){
+  var d=document.createElement('div'); d.className='letter'; d.id='letter-'+i;
+  d.innerHTML='<b>'+L[0]+'</b><small>'+L[1]+'</small>';
+  d.onclick=function(){showLetter(i);};
+  grid.appendChild(d);
+});
+function showLetter(i){
+  var L=LETTERS[i];
+  document.querySelectorAll('.letter').forEach(function(e){e.classList.remove('sel');});
+  document.getElementById('letter-'+i).classList.add('sel');
+  var box=document.getElementById('letterDetail');
+  box.style.display='block';
+  box.innerHTML='<div class="arabic-big">'+L[0]+'</div>'
+    +'<p style="text-align:center;font-size:19px"><b>'+L[1]+'</b> &nbsp;•&nbsp; <span class="bn">'+L[2]+'</span></p>'
+    +'<p id="arVoiceNote" data-i18n="no_ar_voice" style="display:none;text-align:center;color:#92400e;font-size:13.5px;margin-top:6px"></p>'
+    +'<p style="text-align:center"><button class="smallbtn green" onclick="speakLetter('+i+')">🔊 Hear it in Arabic</button></p>';
+  speakLetter(i);
+}
+function arabicVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  var vs=window.speechSynthesis.getVoices();
+  for(var i=0;i<vs.length;i++){
+    if(vs[i].lang && vs[i].lang.toLowerCase().indexOf('ar')===0) return vs[i];
+  }
+  return null;
+}
+function speakLetter(i){
+  var L=LETTERS[i];
+  if(!('speechSynthesis' in window)){alert('Sorry, read-aloud is not available on this device.');return;}
+  var note=document.getElementById('arVoiceNote');
+  window.speechSynthesis.cancel();
+  var vs=window.speechSynthesis.getVoices();
+  var av=arabicVoice();
+  if(vs.length===0){
+    // Voices not loaded yet on this device — try Arabic anyway (lang set, no voice forced);
+    // do not show the "not installed" note, we cannot know yet.
+    if(note) note.style.display='none';
+    var u0=new SpeechSynthesisUtterance(L[0]); u0.lang='ar-SA'; u0.rate=0.7;
+    window.speechSynthesis.speak(u0);
+    var u0e=new SpeechSynthesisUtterance(L[1]); u0e.lang='en-US';
+    window.speechSynthesis.speak(u0e);
+    return;
+  }
+  if(av){
+    if(note) note.style.display='none';
+    var u1=new SpeechSynthesisUtterance(L[0]); u1.lang='ar-SA'; u1.voice=av; u1.rate=0.7;
+    window.speechSynthesis.speak(u1);
+    var u2=new SpeechSynthesisUtterance(L[1]); u2.lang='en-US';
+    window.speechSynthesis.speak(u2);
+  } else {
+    if(note){ note.textContent=(LANGS[currentLang]||LANGS.en).no_ar_voice; note.style.display='block'; }
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(L[1]));
+  }
+}
+// Warm up the voices list so the Arabic-voice check works on first tap.
+if('speechSynthesis' in window){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged=function(){ window.speechSynthesis.getVoices(); };
+}
+
+// ---------- Letter Quiz ----------
+var quizAnswer=null, quizLocked=false;
+function nextQuiz(){
+  quizLocked=false; document.getElementById('quizMsg').textContent='';
+  var idx=Math.floor(Math.random()*LETTERS.length);
+  quizAnswer=LETTERS[idx][1];
+  document.getElementById('quizLetter').textContent=LETTERS[idx][0];
+  var opts=new Set([quizAnswer]);
+  while(opts.size<4){ opts.add(LETTERS[Math.floor(Math.random()*LETTERS.length)][1]); }
+  var arr=Array.from(opts).sort(function(){return Math.random()-0.5;});
+  var box=document.getElementById('quizOpts'); box.innerHTML='';
+  arr.forEach(function(name){
+    var b=document.createElement('button'); b.className='quizopt'; b.textContent=name;
+    b.onclick=function(){
+      if(quizLocked) return; quizLocked=true;
+      if(name===quizAnswer){ b.classList.add('correct'); setStars(getStars()+1);
+        document.getElementById('quizMsg').textContent='✅ Correct! You earned a star!'; }
+      else { b.classList.add('wrong');
+        document.getElementById('quizMsg').textContent='❌ Not quite — the answer is '+quizAnswer+'. Try the next one!'; }
+    };
+    box.appendChild(b);
+  });
+}
+nextQuiz();
+
+// ---------- Surahs (verified standard text) ----------
+var SURAHS=[
+{no:1,name:'Al-Fatiha — The Opening',bn:'সূরা আল-ফাতিহা',verses:7,
+ meanEn:'The Opening — praise of Allah, the Most Merciful, and a prayer for guidance on the straight path.',
+ meanBn:'আল-ফাতিহা — আল্লাহর প্রশংসা, পরম দয়ালুর কাছে সরল পথের প্রার্থনা।',
+ v:[
+ ['بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ','Bismillāhir-Raḥmānir-Raḥīm'],
+ ['الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ','Al-ḥamdu lillāhi Rabbil-‘ālamīn'],
+ ['الرَّحْمَٰنِ الرَّحِيمِ','Ar-Raḥmānir-Raḥīm'],
+ ['مَالِكِ يَوْمِ الدِّينِ','Māliki yawmid-dīn'],
+ ['إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ','Iyyāka na‘budu wa iyyāka nasta‘īn'],
+ ['اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ','Ihdinaṣ-ṣirāṭal-mustaqīm'],
+ ['صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ','Ṣirāṭal-ladhīna an‘amta ‘alayhim, ghayril-maghḍūbi ‘alayhim wa laḍ-ḍāllīn']
+ ]},
+{no:112,name:'Al-Ikhlas — Sincerity',bn:'সূরা আল-ইখলাস',verses:4,
+ meanEn:'Sincerity — Allah is One, the Eternal, who was not born and does not give birth, and none is equal to Him.',
+ meanBn:'আল-ইখলাস — আল্লাহ এক, চিরস্থায়ী; তিনি জন্ম দেননি, জন্ম নেননি, তাঁর সমান কেউ নেই।',
+ v:[
+ ['قُلْ هُوَ اللَّهُ أَحَدٌ','Qul huwallāhu aḥad'],
+ ['اللَّهُ الصَّمَدُ','Allāhuṣ-ṣamad'],
+ ['لَمْ يَلِدْ وَلَمْ يُولَدْ','Lam yalid wa lam yūlad'],
+ ['وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ','Wa lam yakul-lahū kufuwan aḥad']
+ ]},
+{no:113,name:'Al-Falaq — The Daybreak',bn:'সূরা আল-ফালাক',verses:5,
+ meanEn:'The Daybreak — seeking Allah’s protection from the evil of His creation, darkness, magic and envy.',
+ meanBn:'আল-ফালাক — সৃষ্টির অনিষ্ট, অন্ধকার, জাদু ও হিংসা থেকে আল্লাহর আশ্রয় চাওয়া।',
+ v:[
+ ['قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ','Qul a‘ūdhu birabbil-falaq'],
+ ['مِن شَرِّ مَا خَلَقَ','Min sharri mā khalaq'],
+ ['وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ','Wa min sharri ghāsiqin idhā waqab'],
+ ['وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ','Wa min sharrin-naffāthāti fil-‘uqad'],
+ ['وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ','Wa min sharri ḥāsidin idhā ḥasad']
+ ]},
+{no:114,name:'An-Nas — Mankind',bn:'সূরা আন-নাস',verses:6,
+ meanEn:'Mankind — seeking refuge in Allah, Lord of mankind, from the whispering of the evil one.',
+ meanBn:'আন-নাস — মানুষের রব আল্লাহর কাছে কুমন্ত্রণাদানকারীর অনিষ্ট থেকে আশ্রয় চাওয়া।',
+ v:[
+ ['قُلْ أَعُوذُ بِرَبِّ النَّاسِ','Qul a‘ūdhu birabbin-nās'],
+ ['مَلِكِ النَّاسِ','Malikin-nās'],
+ ['إِلَٰهِ النَّاسِ','Ilāhin-nās'],
+ ['مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ','Min sharril-waswāsil-khannās'],
+ ['الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ','Alladhī yuwaswisu fī ṣudūrin-nās'],
+ ['مِنَ الْجِنَّةِ وَالنَّاسِ','Minal-jinnati wan-nās']
+ ]},
+{no:108,name:'Al-Kawthar — Abundance',bn:'সূরা আল-কাওসার',verses:3,
+ meanEn:'Abundance — Allah gave the Prophet ﷺ Al-Kawthar, so pray to your Lord and sacrifice; his enemy is cut off.',
+ meanBn:'আল-কাওসার — আল্লাহ নবী ﷺ-কে কাওসার দিয়েছেন; তাই রবের জন্য নামাজ পড়ো ও কুরবানি করো।',
+ v:[
+ ['إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ','Innā a‘ṭaynākal-kawthar'],
+ ['فَصَلِّ لِرَبِّكَ وَانْحَرْ','Faṣalli lirabbika wanḥar'],
+ ['إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ','Inna shāni’aka huwal-abtar']
+ ]}
+];
+var sList=document.getElementById('surahList');
+SURAHS.forEach(function(s,si){
+  var d=document.createElement('div'); d.className='card';
+  var h='<h2>'+s.name+'</h2><p class="bn">'+s.bn+' • '+s.verses+' verses • Surah '+s.no+'</p>'
+    +'<p><b>Meaning:</b> '+s.meanEn+'</p><p class="bn"><b>অর্থ:</b> '+s.meanBn+'</p>';
+  s.v.forEach(function(v,vi){
+    h+='<div class="verse" onclick="this.classList.toggle(\'sel\')"><div class="arabic">'+v[0]+'</div><div class="translit">'+(vi+1)+'. '+v[1]+'</div></div>';
+  });
+  d.innerHTML=h; sList.appendChild(d);
+});
+
+// ---------- Daily Duas (only duas verified word-for-word) ----------
+var DUAS=[
+{title:'Before Eating',bn:'খাওয়ার আগে',
+ ar:'بِسْمِ اللَّهِ وَعَلَى بَرَكَةِ اللَّهِ',tr:'Bismillāhi wa ‘alā barakatillāh',
+ en:'In the name of Allah, and with the blessing of Allah.',
+ bnm:'আল্লাহর নামে, আল্লাহর বরকতে।'},
+{title:'After Eating',bn:'খাওয়ার পরে',
+ ar:'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مِنَ الْمُسْلِمِينَ',tr:'Al-ḥamdu lillāhil-ladhī aṭ‘amanā wa saqānā wa ja‘alanā minal-muslimīn',
+ en:'All praise is for Allah, who fed us, gave us drink, and made us Muslims.',
+ bnm:'সব প্রশংসা আল্লাহর, যিনি আমাদের খাইয়েছেন, পান করিয়েছেন এবং মুসলিম বানিয়েছেন।'},
+{title:'Before Sleeping',bn:'ঘুমানোর আগে',
+ ar:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',tr:'Bismika Allāhumma amūtu wa aḥyā',
+ en:'In Your name, O Allah, I die and I live.',
+ bnm:'হে আল্লাহ, তোমার নামে আমি মরি ও বাঁচি।'},
+{title:'Entering Home',bn:'ঘরে ঢোকার সময়',
+ ar:'بِسْمِ اللَّهِ وَلَجْنَا وَبِسْمِ اللَّهِ خَرَجْنَا وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا',tr:'Bismillāhi walajnā, wa bismillāhi kharajnā, wa ‘alallāhi rabbinā tawakkalnā',
+ en:'In the name of Allah we enter, in the name of Allah we leave, and upon Allah, our Lord, we put our trust.',
+ bnm:'আল্লাহর নামে আমরা ঢুকলাম, আল্লাহর নামে আমরা বের হলাম, আর আমাদের রব আল্লাহর উপর আমরা ভরসা করলাম।'},
+{title:'For Parents',bn:'বাবা-মায়ের জন্য',
+ ar:'رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا',tr:'Rabbir-ḥamhumā kamā rabbayānī ṣaghīrā',
+ en:'My Lord, have mercy on them, as they raised me when I was small. (Quran 17:24)',
+ bnm:'হে আমার রব, তাদের প্রতি দয়া করো, যেমন তারা ছোটবেলায় আমাকে লালন-পালন করেছেন। (কুরআন ১৭:২৪)'}
+];
+var dList=document.getElementById('duaList');
+DUAS.forEach(function(d){
+  var el=document.createElement('div'); el.className='card';
+  el.innerHTML='<h2>🤲 '+d.title+'</h2><p class="bn">'+d.bn+'</p>'
+    +'<div class="arabic">'+d.ar+'</div>'
+    +'<div class="translit">'+d.tr+'</div>'
+    +'<p><b>Meaning:</b> '+d.en+'</p><p class="bn"><b>অর্থ:</b> '+d.bnm+'</p>';
+  dList.appendChild(el);
+});
+
+// ---------- Islamic Stories ----------
+var STORIES=[
+{title:'Prophet Yunus and the Whale 🐋',bn:'নবী ইউনুস (আ.) ও তিমি মাছ',
+ en:'Prophet Yunus was sent to guide his people, but they did not listen. He left on a ship, and a great storm came. The sailors cast lots, and Yunus was thrown into the sea. A huge whale swallowed him, but Allah kept him safe inside. In the darkness, Yunus prayed: "There is no god but You, glory be to You, I was among the wrongdoers." Allah forgave him and the whale set him free on the shore. Yunus returned to his people, and this time they believed.',
+ bns:'ইউনুস (আ.) তাঁর জাতিকে সত্যের পথে ডাকলেন, কিন্তু তারা শুনল না। তিনি জাহাজে উঠলেন, ঝড় এলো, তাঁকে সমুদ্রে ফেলা হলো। একটি বড় তিমি তাঁকে গিলে ফেলল, কিন্তু আল্লাহ তাঁকে রক্ষা করলেন। অন্ধকারে তিনি দোয়া করলেন, আল্লাহ তাঁকে ক্ষমা করলেন এবং তিমি তাঁকে তীরে নামিয়ে দিল।',
+ moral:'Never lose hope — Allah always hears our prayer and forgives us when we turn back to Him.',
+ morbn:'কখনো আশা হারিও না — আল্লাহ সবসময় আমাদের দোয়া শোনেন এবং ফিরে এলে ক্ষমা করেন।'},
+{title:'Prophet Ibrahim and the Fire 🔥',bn:'নবী ইব্রাহিম (আ.) ও আগুন',
+ en:'Prophet Ibrahim knew there is only one God, Allah. His people worshipped idols made of stone, so Ibrahim broke the idols to show them they could not help anyone. The king became very angry and ordered a huge fire to be made. They threw Ibrahim into the fire. But Allah said, "O fire, be cool and safe for Ibrahim." The fire did not burn him at all. Ibrahim came out safe, because he trusted Allah completely.',
+ bns:'ইব্রাহিম (আ.) জানতেন আল্লাহই একমাত্র উপাস্য। তাঁর জাতি পাথরের মূর্তি পূজা করত, তাই তিনি মূর্তিগুলো ভেঙে দেখালেন যে এগুলো কারো উপকার করতে পারে না। রাজা রেগে গিয়ে তাঁকে বিশাল আগুনে ফেলার আদেশ দিলেন। কিন্তু আল্লাহ বললেন, "হে আগুন, ইব্রাহিমের জন্য ঠান্ডা ও নিরাপদ হয়ে যাও।" আগুন তাঁকে পোড়াল না।',
+ moral:'Stand for the truth and trust Allah — He protects those who trust Him.',
+ morbn:'সত্যের পক্ষে দাঁড়াও আর আল্লাহর উপর ভরসা করো — তিনি ভরসাকারীদের রক্ষা করেন।'},
+{title:'The Boy Called Al-Amin 🤝',bn:'আল-আমিন নামের বালক',
+ en:'When Prophet Muhammad ﷺ was a young boy, people in Makkah noticed something special about him: he never lied, and he always kept his promises. People trusted him with their money and goods, because they knew he would keep them safe. That is why everyone called him "Al-Amin" — the Trustworthy. Even before he became a prophet, his honesty made everyone love and respect him.',
+ bns:'নবী মুহাম্মদ ﷺ যখন ছোট ছিলেন, মক্কার মানুষ দেখল তিনি কখনো মিথ্যা বলেন না, সবসময় কথা রাখেন। সবাই তাঁর কাছে টাকা-পয়সা আমানত রাখত, কারণ জানত তিনি তা নিরাপদে রাখবেন। তাই সবাই তাঁকে "আল-আমিন" — বিশ্বস্ত — বলে ডাকত।',
+ moral:'Honesty earns trust — be truthful like the Prophet ﷺ, and people will trust you.',
+ morbn:'সততা বিশ্বাস আনে — নবী ﷺ-এর মতো সত্যবাদী হও, সবাই তোমাকে বিশ্বাস করবে।'}
+];
+var stList=document.getElementById('storyList');
+STORIES.forEach(function(s){
+  var el=document.createElement('div'); el.className='card';
+  el.innerHTML='<h2>'+s.title+'</h2><p class="bn">'+s.bn+'</p><p>'+s.en+'</p><p class="bn">'+s.bns+'</p>'
+    +'<h3>💡 Moral</h3><p>'+s.moral+'</p><p class="bn">'+s.morbn+'</p>';
+  stList.appendChild(el);
+});
+
+updateStars();
+</script>
+</body>
+</html>
