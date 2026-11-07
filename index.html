@@ -235,7 +235,7 @@ document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener(
 
 // ---------- Progress (localStorage only) ----------
 function getStars(){return parseInt(localStorage.getItem('kq_stars')||'0',10)||0;}
-function setStars(n){localStorage.setItem('kq_stars',String(n));// ---------- Bengali Alphabet: 11 vowels + 39 consonants = 50 ----------
+function setStars(n){localStorage.setItem('kq_stars',String(n));updateStars();}// ---------- Bengali Alphabet: 11 vowels + 39 consonants = 50 ----------
 // Each entry: [letter, picture-word, emoji, rhyme]
 var BN_VOWELS=[
 ['অ','অজগর','🐍','অজগরটি আসছে তেড়ে'],
@@ -421,7 +421,7 @@ function nextEnQuiz(){
 }
 nextEnQuiz();
 
-updateStars();}
+
 function updateStars(){
   var n=getStars();
   document.getElementById('starCount').textContent=n;
